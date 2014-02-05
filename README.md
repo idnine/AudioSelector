@@ -29,3 +29,13 @@ MSP430 -> TS3A5017 signal (EN, IN1, IN2)
  * CH3  : L, L, H  (LED 3 ON)
  * MUTE : H, x, x  (LED Blink)
 
+HOW TO MAKE in CCS
+ * Project - New CCS Project
+ * "Project Name" type "AudioSelector"
+ * "Device" Select MSP430 - MSP430G2553
+ * select "Empty Project (with main.c)
+ * and "OK"
+ * copy & paste main.c
+ * BUILD & DEBUG
+ * That's All. Done.
+
