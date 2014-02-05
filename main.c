@@ -23,20 +23,9 @@ volatile	int 	ledCh = 0;
 volatile	int 	selectedCh = 1;
 volatile	int 	isMute = 0;
 
-void setLedCh(int ch)
-{
-	switch(ch)
-	{
-		default :
-		case 1 : ledCh = LED1; break;
-		case 2 : ledCh = LED2; break;
-		case 3 : ledCh = LED3; break;
-	}
-}
-
 int main(void)
 {
-	// Watchdoc OFF, Internal Clock 1 MHz Set
+	// Watchdog OFF, Internal Clock 1 MHz Set
 	WDTCTL = WDTPW + WDTHOLD;
 	BCSCTL1 = CALBC1_1MHZ;
 	DCOCTL = CALDCO_1MHZ;
@@ -49,6 +38,10 @@ int main(void)
 	P1OUT |= (SEL + MUTE);			// Internal Pull-Up
 
 	// Interrupt Setup
+	TACCTL0 = CCIE;					// CCR0 interrupt enabled
+	TACCR0 = 20000;					// Timer Interval
+	TACTL = TASSEL_2 + MC_1 + ID_3;	// SMCLK, Up-Mode
+
 	P1IES = (SEL + MUTE);			// Interrupt Edge Selector, P1.3 High -> Low
 	P1IFG &= ~(SEL + MUTE);			// Interrupt Flag Clear
 	P1IE  = (SEL + MUTE);			// Interrupt Enable
@@ -56,42 +49,21 @@ int main(void)
 	// Initial Value Output
 	P1OUT &= ~(LED1 + LED2 + LED3);
 	P1OUT |= LED1;
+	ledCh = LED1;
 	P2OUT &= ~(EN + IN1 + IN2);		// Default Ch1 Selected
 
-	// Global Interrupt Enable, START
-	_EINT();
-	//_BIS_SR(LPM4_bits + GIE); // This is Power Save Mode
+	// Global Interrupt Enable, Power Save Mode (Sleep)
+	_BIS_SR(LPM0_bits + GIE); // This is Power Save Mode
+}
 
-	volatile int i;
-	volatile unsigned int j;
-
-	while(1)
-	{
-		for(i=maxCh; i > 0; i--)
-		{
-			setLedCh(i);
-
-			if(i == selectedCh)
-			{
-				if(isMute)
-				{
-					// 해당 채널 Blink
-					P1OUT ^= ledCh;
-					for(j=20000; j>0; j--);
-				}
-				else
-				{
-					// 해당 채널 ON
-					P1OUT |= ledCh;
-				}
-			}
-			else
-			{
-				// 현재 채널 OFF
-				P1OUT &= ~ledCh;
-			}
-		}
-	}
+// Timer A0 interrupt service routine
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void Timer_A (void)
+{
+	if(isMute)
+		P1OUT ^= ledCh;
+	else
+		P1OUT |= ledCh;
 }
 
 #pragma vector=PORT1_VECTOR
@@ -99,6 +71,7 @@ __interrupt void swAction(void)
 {
 	if(P1IFG & SEL)
 	{
+		P1OUT &= ~(LED1 + LED2 + LED3);
 		// Channel Change
 		selectedCh++;
 		if(selectedCh > maxCh) selectedCh = 1;
@@ -106,13 +79,19 @@ __interrupt void swAction(void)
 		{
 			default:
 			case 1 :
+				ledCh = LED1;
+				P1OUT |= LED1;
 				P2OUT &= ~(IN1 + IN2);
 				break;
 			case 2 :
+				ledCh = LED2;
+				P1OUT |= LED2;
 				P2OUT &= ~IN2;
 				P2OUT |= IN1;
 				break;
 			case 3 :
+				ledCh = LED3;
+				P1OUT |= LED3;
 				P2OUT &= ~IN1;
 				P2OUT |= IN2;
 				break;
