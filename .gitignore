@@ -32,4 +32,5 @@ readme.txt
 *.pp
 *.mk
 *.prefs
+*.cmd
 makefile
