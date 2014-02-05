@@ -18,3 +18,18 @@
 *.app
 
 # CCS Output Files
+.ccsproject
+.cproject
+.project
+.lnk_msp430g22553
+readme.txt
+*.ccxml
+*.map
+*.out
+*.xml
+*.opt
+*.obj
+*.pp
+*.mk
+*.prefs
+makefile
