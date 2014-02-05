@@ -4,7 +4,7 @@ Audio Selector
 Audio Input Selector
  * Audio Multiplexer : TS3A5017 (TI, 16pin)
  * Controller : MSP430-G2-253 (TI, 20pin)
- * Working with Code Composer Studio
+ * Coding ENV. : Code Composer Studio
  * Code by Koo Jonghoe (idnine@gmail.com, AudioCookie)
  * Feb. 5, 2014
 
@@ -28,3 +28,4 @@ MSP430 -> TS3A5017 signal (EN, IN1, IN2)
  * CH2  : L, H, L  (LED 2 ON)
  * CH3  : L, L, H  (LED 3 ON)
  * MUTE : H, x, x  (LED Blink)
+
