@@ -30,6 +30,7 @@ MSP430 -> TS3A5017 signal (EN, IN1, IN2)
  * MUTE : H, x, x  (LED Blink)
 
 HOW TO MAKE in CCS
+ * MSP430 Launchpad J5 P1.6 Jumper Unplug
  * Project - New CCS Project
  * "Project Name" type "AudioSelector"
  * "Device" Select MSP430 - MSP430G2553
