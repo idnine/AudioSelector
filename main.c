@@ -18,7 +18,7 @@
 	const	int 	IN2  = 0x04;	// P2.2
 
 	const	int 	maxCh = 3;	// Audio Input Ch. Count
-	const	int 	blinkDelay = 20000;		// LED blink interval
+	const	int 	blinkDelay = 20000; // LED blink interval
 
 volatile	int 	ledCh = 0;
 volatile	int 	selectedCh = 1;
@@ -33,28 +33,28 @@ int main(void)
 
 	// IO Setup
 	P1DIR |= (LED1 + LED2 + LED3);	// Output Setup
-	P2DIR |= (EN + IN1 + IN2);		// Output Setup
-	P1DIR &= ~(SEL + MUTE);			// Input Switch Setup
-	P1REN |= (SEL + MUTE);			// Internal Pull-Up Enable
-	P1OUT |= (SEL + MUTE);			// Internal Pull-Up
+	P2DIR |= (EN + IN1 + IN2);	// Output Setup
+	P1DIR &= ~(SEL + MUTE);		// Input Switch Setup
+	P1REN |= (SEL + MUTE);		// Internal Pull-Up Enable
+	P1OUT |= (SEL + MUTE);		// Internal Pull-Up
 
 	// Interrupt Setup
-	TACCTL0 = CCIE;					// CCR0 interrupt enabled
-	TACCR0 = blinkDelay;			// Timer Interval
+	TACCTL0 = CCIE;			// CCR0 interrupt enabled
+	TACCR0 = blinkDelay;		// Timer Interval
 	TACTL = TASSEL_2 + MC_1 + ID_3;	// SMCLK, Up-Mode
 
-	P1IES = (SEL + MUTE);			// Interrupt Edge Selector, P1.3 High -> Low
-	P1IFG &= ~(SEL + MUTE);			// Interrupt Flag Clear
-	P1IE  = (SEL + MUTE);			// Interrupt Enable
+	P1IES = (SEL + MUTE);		// Interrupt Edge Selector, P1.3 High -> Low
+	P1IFG &= ~(SEL + MUTE);		// Interrupt Flag Clear
+	P1IE  = (SEL + MUTE);		// Interrupt Enable
 
 	// Initial Value Output
 	P1OUT &= ~(LED1 + LED2 + LED3);
 	P1OUT |= LED1;
 	ledCh = LED1;
-	P2OUT &= ~(EN + IN1 + IN2);		// Default Ch1 Selected
+	P2OUT &= ~(EN + IN1 + IN2);	// Default Ch1 Selected
 
 	// Global Interrupt Enable, Power Save Mode (Sleep)
-	_BIS_SR(LPM0_bits + GIE); // This is Power Save Mode
+	_BIS_SR(LPM0_bits + GIE);
 }
 
 // Timer A0 interrupt service routine
@@ -72,8 +72,8 @@ __interrupt void swAction(void)
 {
 	if(P1IFG & SEL)
 	{
-		P1OUT &= ~(LED1 + LED2 + LED3);
 		// Channel Change
+		P1OUT &= ~(LED1 + LED2 + LED3);		// All LED Off
 		selectedCh++;
 		if(selectedCh > maxCh) selectedCh = 1;
 		switch(selectedCh)
