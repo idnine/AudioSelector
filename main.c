@@ -83,22 +83,20 @@ __interrupt void swAction(void)
 			default:
 			case 1 :
 				ledCh = LED1;
-				P1OUT |= LED1;
 				P2OUT &= ~(IN1 + IN2);
 				break;
 			case 2 :
 				ledCh = LED2;
-				P1OUT |= LED2;
 				P2OUT &= ~IN2;
 				P2OUT |= IN1;
 				break;
 			case 3 :
 				ledCh = LED3;
-				P1OUT |= LED3;
 				P2OUT &= ~IN1;
 				P2OUT |= IN2;
 				break;
 		}
+		P1OUT |= ledCh;
 		P1IFG &= ~SEL;
 	}
 	else if(P1IFG & MUTE)
