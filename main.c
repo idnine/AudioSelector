@@ -67,6 +67,7 @@ __interrupt void Timer_A (void)
 		P1OUT |= ledCh;
 }
 
+// Port1 Change interrupt service routine
 #pragma vector=PORT1_VECTOR
 __interrupt void swAction(void)
 {
@@ -117,3 +118,4 @@ __interrupt void swAction(void)
 	else
 		P1IFG = 0x00;
 }
+// All Code END
