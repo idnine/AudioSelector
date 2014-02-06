@@ -17,8 +17,8 @@
 	const	int 	IN1  = 0x02;	// P2.1
 	const	int 	IN2  = 0x04;	// P2.2
 
-	const	int 	maxCh = 3;		// Audio Input Ch. Count
-	const	int		blinkDelay = 20000;		// LED blink interval
+	const	int 	maxCh = 3;	// Audio Input Ch. Count
+	const	int 	blinkDelay = 20000;		// LED blink interval
 
 volatile	int 	ledCh = 0;
 volatile	int 	selectedCh = 1;
