@@ -8,16 +8,17 @@
 //******************************************************************************
 #include <msp430.h>
 
-	const	int		LED1 = 0x08;	// P1.3
-	const	int		LED2 = 0x10;	// P1.4
-	const	int		LED3 = 0x20;	// P1.5
-	const	int		SEL  = 0x40;	// P1.6
-	const	int		MUTE = 0x80;	// P1.7
-	const	int		EN   = 0x01;	// P2.0
-	const	int		IN1  = 0x02;	// P2.1
-	const	int		IN2  = 0x04;	// P2.2
+	const	int 	LED1 = 0x08;	// P1.3
+	const	int 	LED2 = 0x10;	// P1.4
+	const	int 	LED3 = 0x20;	// P1.5
+	const	int 	SEL  = 0x40;	// P1.6
+	const	int 	MUTE = 0x80;	// P1.7
+	const	int 	EN   = 0x01;	// P2.0
+	const	int 	IN1  = 0x02;	// P2.1
+	const	int 	IN2  = 0x04;	// P2.2
 
 	const	int 	maxCh = 3;		// Audio Input Ch. Count
+	const	int		blinkDelay = 20000;		// LED blink interval
 
 volatile	int 	ledCh = 0;
 volatile	int 	selectedCh = 1;
@@ -39,7 +40,7 @@ int main(void)
 
 	// Interrupt Setup
 	TACCTL0 = CCIE;					// CCR0 interrupt enabled
-	TACCR0 = 20000;					// Timer Interval
+	TACCR0 = blinkDelay;			// Timer Interval
 	TACTL = TASSEL_2 + MC_1 + ID_3;	// SMCLK, Up-Mode
 
 	P1IES = (SEL + MUTE);			// Interrupt Edge Selector, P1.3 High -> Low
